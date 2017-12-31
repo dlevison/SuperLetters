@@ -2,6 +2,9 @@
 
 <head>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 	<style type="text/css">
             
             * {
@@ -54,10 +57,21 @@
             &.glow {
                 +text-shadow(0 0 4px #ffffff);
             }
+            .ui-dialog .ui-dialog-title {
+                text-align: center;
+            }
+            .ui-dialog .ui-dialog-content {
+                text-align: center;
+            }
 	</style>
 </head> 
 <body>
-    <h1 class="flying-title">אתר האותיות של שחר </h1>
+    <h1 class="flying-title">אתר האותיות של שחר ורותם</h1>
+    <div id="dialog" title="משחק האותיות">
+  <p>לחץ על האותיות במקלדת כדי לתפוס אותן לפני שהן נעצרות</p>
+  <br></br>
+  <p>!חשוב לוודא שהמקלדת על אנגלית ושהרמקולים מופעלים</p>
+</div>
     <div id="infoToggler">
         <img src="pause-button.png" width="60px" height="60px" onclick="pauseGame()"/>
         <img src="play.png" width="60px" height="60px" onclick="restartGame()" style="display:none"/>
@@ -133,7 +147,28 @@ document.onkeyup = function (e) {
     
     return false;
   }
-}; 
+};
+
+// help dialog box
+$( "#dialog" ).dialog({
+      autoOpen: true,
+      width: 600,
+      height: 200,
+      show: {
+        effect: "blind",
+        duration: 1000
+      },
+      hide: {
+        effect: "explode",
+        duration: 1000
+      },
+      buttons: {
+        הבנתי: function() {
+          $( this ).dialog( "close" );
+        }
+      }
+    });
+
 </script>
 <script>
  

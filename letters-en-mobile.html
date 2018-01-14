@@ -1,0 +1,287 @@
+<!doctype html>
+
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-111754723-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-111754723-1');
+    </script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<style type="text/css">
+            
+            * {
+                margin: 0;
+                padding: 0;
+            }
+            body {
+                background-color: #000;
+            }
+            .letter {
+                list-style: none;
+                display: inline-block;
+                font-family: Open Sans, Arial;
+                font-weight: 300;
+                font-size: 4em;
+                color: #fff;
+                opacity: 1;
+            }
+            .flying-title {
+                list-style: none;
+                position: absolute;
+                right: 5%;
+                top: 10%;
+                transform: translateX(-50%) translateY(-50%);
+                display: inline-block;
+                margin-right: 50px;
+                font-family: Open Sans, Arial;
+                font-weight: 300;
+                font-size: 3em;
+                color: green;
+                opacity: 1;
+                transition: all 2.5s ease;
+            }
+            .count {
+                position: absolute;
+                left: 5%;
+                top: 10%;
+                padding: 14px 16px;
+                font-size: 40px;
+                line-height: 40px;
+                font-weight: 600;
+                font-smoothing: antialiased;
+                -webkit-font-smoothing: antialiased;
+                +border-radius(4px);
+                display: inline-block;
+                background: rgba(255,255,255,0.1);
+                text-align: center;
+                color: #ffffff;
+            }
+            &.glow {
+                +text-shadow(0 0 4px #ffffff);
+            }
+            .ui-dialog .ui-dialog-title {
+                text-align: center;
+            }
+            .ui-dialog .ui-dialog-content {
+                text-align: center;
+            }
+	</style>
+</head> 
+<body>
+    <h1 class="flying-title">אתר האותיות של שחר ורותם</h1>
+    <div id="dialog" title="משחק האותיות">
+  <p>לחץ על האותיות במקלדת כדי לתפוס אותן לפני שהן נעצרות</p>
+  <br></br>
+  <p>!חשוב לוודא שהמקלדת על אנגלית ושהרמקולים מופעלים</p>
+</div>
+    <div id="infoToggler">
+        <img src="pause-button.png" width="60px" height="60px" onclick="pauseGame()"/>
+        <img src="play.png" width="60px" height="60px" onclick="restartGame()" style="display:none"/>
+    </div>
+    <div class="count">0</div>
+    <audio id="soundA"><source src="sounds/a.mp3"></audio>
+    <audio id="soundB"><source src="sounds/b.mp3"></audio>
+    <audio id="soundC"><source src="sounds/c.mp3"></audio>
+    <audio id="soundD"><source src="sounds/d.mp3"></audio>
+    <audio id="soundE"><source src="sounds/e.mp3"></audio>
+    <audio id="soundF"><source src="sounds/f.mp3"></audio>
+    <audio id="soundG"><source src="sounds/g.mp3"></audio>
+    <audio id="soundH"><source src="sounds/h.mp3"></audio>
+    <audio id="soundI"><source src="sounds/i.mp3"></audio>
+    <audio id="soundJ"><source src="sounds/j.mp3"></audio>
+    <audio id="soundK"><source src="sounds/k.mp3"></audio>
+    <audio id="soundL"><source src="sounds/l.mp3"></audio>
+    <audio id="soundM"><source src="sounds/m.mp3"></audio>
+    <audio id="soundN"><source src="sounds/n.mp3"></audio>
+    <audio id="soundO"><source src="sounds/o.mp3"></audio>
+    <audio id="soundP"><source src="sounds/p.mp3"></audio>
+    <audio id="soundQ"><source src="sounds/q.mp3"></audio>
+    <audio id="soundR"><source src="sounds/r.mp3"></audio>
+    <audio id="soundS"><source src="sounds/s.mp3"></audio>
+    <audio id="soundT"><source src="sounds/t.mp3"></audio>
+    <audio id="soundU"><source src="sounds/u.mp3"></audio>
+    <audio id="soundV"><source src="sounds/v.mp3"></audio>
+    <audio id="soundW"><source src="sounds/w.mp3"></audio>
+    <audio id="soundX"><source src="sounds/x.mp3"></audio>
+    <audio id="soundY"><source src="sounds/y.mp3"></audio>
+    <audio id="soundZ"><source src="sounds/z.mp3"></audio>
+</body>
+<script>
+var pressed = {},
+    maxValue = 2,
+    duration,
+    volume,
+    suffix;
+
+document.onkeydown = function (e) {
+  if (pressed[e.which]) return;
+  pressed[e.which] = e.timeStamp;
+};
+
+$(document).keypress(function(e){
+    suffix = String.fromCharCode(e.keyCode);
+});
+
+document.onkeyup = function (e) {
+  if (!pressed[e.which]) return;
+  
+  if (e.keyCode > 0) {
+    audio = document.getElementById('sound'+suffix.toUpperCase());
+
+    // Calculate press time
+    duration = (e.timeStamp - pressed[e.which]) / 1000;
+
+    // Calculate new volume
+    if (duration >= maxValue) {
+      volume = 1;
+    } else {
+      volume = duration / maxValue;
+    }
+    
+    // Set the volume and play the track
+    audio.volume = volume;
+    audio.play();
+    
+    pressed[e.which] = 0;
+    
+    // Log press duration and resulting volume
+    console.log('Key ' + e.which  + ' was pressed for ' + duration + ' seconds. Volume is set to ' + (volume * 100).toFixed(2) + '%');
+    
+    return false;
+  }
+};
+
+// help dialog box
+$( "#dialog" ).dialog({
+      autoOpen: true,
+      width: 600,
+      height: 200,
+      show: {
+        effect: "blind",
+        duration: 1000
+      },
+      hide: {
+        effect: "explode",
+        duration: 1000
+      },
+      buttons: {
+        הבנתי: function() {
+          $( this ).dialog( "close" );
+        }
+      }
+    });
+
+</script>
+<script>
+ 
+var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+var score = 0;
+
+function randomNumber(max) {
+    
+    var randomNum       = Math.random();
+    var numExpanded     = randomNum * max;
+    var numFloored      = Math.floor(numExpanded);
+    
+    return numFloored;
+}
+
+function randomLetter() {
+    
+    var random0to25     = randomNumber(letters.length);
+	var randomLetter    = letters.charAt(random0to25);
+	
+	return randomLetter;
+}
+
+function createLetter() {
+	
+	var span            = $('<span class="letter" status="live" onmousedown="letterClicked(this)"/>');
+	span.css("position", "absolute");
+	span.css("top", 0);
+	randomPercent       = randomNumber(96)+"%";    //concatenation
+	span.css("left", randomPercent); 
+	span.text(randomLetter())
+	span.appendTo("body");
+ 	
+ 	return span;
+}
+
+function makeLetterFall() {
+    if(score<=-500) {
+        clearInterval(lettersGenerator);
+        alert("GAME OVER");
+    } else {
+        var letterElement = createLetter();
+        randomPercent     = (50+randomNumber(45))+"%";
+        letterElement.animate({top:randomPercent}, 15000, "swing",function() {   //time of animation
+            $( this ).after( letterLanded(letterElement) );
+        });
+    }
+}
+
+function pauseGame() {
+    clearInterval(lettersGenerator);
+}
+
+function restartGame() {
+    lettersGenerator = setInterval(makeLetterFall, 3000);
+}
+
+function letterLanded(elm) {
+    if(elm.attr("status")==='live') {
+        decreaseCount(5);
+        elm.css("color","red");  
+    }
+} 
+
+function letterClicked(str) {
+    var clickedLetter = str.innerHTML;
+    removeTypedLetter(clickedLetter);
+
+    audio = document.getElementById('sound'+clickedLetter.toUpperCase());
+    audio.play();
+}
+
+function removeTypedLetter(typedLetter) {
+    var letterElement  = $("span:contains("+typedLetter.toUpperCase()+")").first();
+    if(letterElement.text()) {
+       increaceCount(10);
+    } else {
+        decreaseCount(10);
+    }
+    letterElement.attr("status","dead");
+    letterElement.remove();
+}
+
+function letterPressed(pressedKey) {
+    var typedLetter     = String.fromCharCode(pressedKey.keyCode);
+    removeTypedLetter(typedLetter);
+}
+
+function increaceCount(n) {
+    score = score+n
+    $('.count').text(score);
+}
+function decreaseCount(n) {
+    score = score-n
+    $('.count').text(score);
+}
+
+$("#infoToggler").click(function() {
+    $(this).find('img').toggle();
+});
+
+$(document).on("keypress", letterPressed);
+
+var lettersGenerator = setInterval(makeLetterFall, 3000); //interval between letters
+ 
+</script>
